@@ -12,9 +12,9 @@ function Request(options) {
 }
 
 /** Fetch social accounts of a certain type */
-Request.accounts = function(type, callback, errorhandler) {
+Request.accounts = function(type, options, callback, errorhandler) {
   errorhandler = errorhandler || echoError;
-  exec(callback, errorhandler, 'ShareKit', 'getAccounts', [type]);
+  exec(callback, errorhandler, 'ShareKit', 'getAccounts', [type, options]);
 };
 
 /** Send http request */

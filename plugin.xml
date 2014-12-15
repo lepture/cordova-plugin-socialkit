@@ -19,5 +19,7 @@
         </config-file>
         <header-file src="src/ios/CDVShareKit.h" />
         <source-file src="src/ios/CDVShareKit.m" />
+        <framework src="Accounts.framework" weak="true" />
+        <framework src="Social.framework" weak="true" />
     </platform>
 </plugin>
