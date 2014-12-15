@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="com.lepture.cordova.sharekit" version="0.1.0">
+    <name>ShareKit</name>
+    <description>Cordova ShareKit Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,sharekit,weibo,twitter,facebook</keywords>
+    <repo>https://github.com/lepture/cordova-plugin-sharekit.git</repo>
+
+    <js-module src="www/sharekit.js" name="sharekit">
+        <clobbers target="sharekit" />
+    </js-module>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="ShareKit">
+                <param name="ios-package" value="CDVShareKit"/>
+            </feature>
+        </config-file>
+        <header-file src="src/ios/CDVShareKit.h" />
+        <source-file src="src/ios/CDVShareKit.m" />
+    </platform>
+</plugin>
