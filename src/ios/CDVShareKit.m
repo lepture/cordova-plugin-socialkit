@@ -55,20 +55,24 @@
 
 - (void) sendRequest:(CDVInvokedUrlCommand*)command
 {
-    NSString *socialType = [command.arguments objectAtIndex:0];
-    NSString *identifier = [command.arguments objectAtIndex:1];
-    NSString *method = [command.arguments objectAtIndex:2];
-    NSString *url = [command.arguments objectAtIndex:3];
-    NSDictionary *params = [command.arguments objectAtIndex:4];
+    [self.commandDelegate runInBackground:^{
 
-    [self sendRequest:socialType identifier:identifier method:method URL:url parameters:params completion:^(NSDictionary *responseData, NSString *error) {
-        CDVPluginResult* pluginResult = nil;
-        if (error) {
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
-        } else {
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseData];
-        }
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        NSString *socialType = [command.arguments objectAtIndex:0];
+        NSString *identifier = [command.arguments objectAtIndex:1];
+        NSString *method = [command.arguments objectAtIndex:2];
+        NSString *url = [command.arguments objectAtIndex:3];
+        NSDictionary *params = [command.arguments objectAtIndex:4];
+
+        [self sendRequest:socialType identifier:identifier method:method URL:url parameters:params completion:^(NSDictionary *responseData, NSString *error) {
+            CDVPluginResult* pluginResult = nil;
+            if (error) {
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
+            } else {
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseData];
+            }
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        }];
+
     }];
 }
 
