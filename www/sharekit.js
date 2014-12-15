@@ -14,12 +14,14 @@ function Request(options) {
 /** Fetch social accounts of a certain type */
 Request.accounts = function(type, options, callback, errorhandler) {
   errorhandler = errorhandler || echoError;
+  options = options || {};
   exec(callback, errorhandler, 'ShareKit', 'getAccounts', [type, options]);
 };
 
 /** Send http request */
 Request.prototype.http = function(method, url, params, callback, errorhandler) {
   errorhandler = errorhandler || echoError;
+  params = params || {};
   exec(callback, errorhandler, 'ShareKit', 'sendRequest', [
        this.type, this.account, method, url, params
   ]);
