@@ -1,15 +1,17 @@
 # cordova-plugin-socialkit
 
-This plugin defines a global `navigator.socialkit` object, which provides
-an API for requesting the social services.
+**WIP**
 
-Although the object is attached to the global scoped navigator, it is not
-available until after the deviceready event.
+This plugin defines a `SocialKit` object, which provides an API for requesting
+built-in social services.
+
+It is not available until after the deviceready event.
 
 ```js
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
-    console.log(navigator.socialkit);
+    var SocialKit = cordova.require('com.lepture.socialkit.SocialKit');
+    console.log(SocialKit);
 }
 ```
 
@@ -19,10 +21,10 @@ Install the plugin with `cordova`:
 
     cordova plugin add com.lepture.socialkit
 
-## navigator.socialkit.getAccounts
+## SocialKit.getAccounts
 
 
-## navigator.socialkit.Request
+## SocialKit#http
 
 
 ## Supported Platforms
@@ -31,3 +33,14 @@ Only iOS.
 
 
 ## Examples
+
+Request for weibo home timeline:
+
+```js
+SocialKit.getAccounts('SinaWeibo', {}, function(data) {
+    // we just try the first account
+    var account = data[0];
+    var req = new SocialKit('SinaWeibo', account);
+    req.get('https://api.weibo.com/2/statuses/home_timeline.json', {}, null, console.log);
+});
+```
