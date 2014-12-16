@@ -1,3 +1,12 @@
+//
+// Cordova Plugin for SocialKit
+//
+// This plugin enables sending requests to social services with built-in
+// credentials.
+//
+// Copyright (c) 2014 Hsiaoming Yang.
+// Licensed under MIT.
+//
 
 #import <Accounts/ACAccount.h>
 #import <Accounts/ACAccountStore.h>
@@ -39,6 +48,8 @@
 
     NSString *socialType = [command.arguments objectAtIndex:0];
     NSDictionary *options = [command.arguments objectAtIndex:1 withDefault:nil];
+
+    // nil is required for empty options
     if (options != nil && [options count] == 0) {
         options = nil;
     }
@@ -93,6 +104,7 @@
     } else if ([socialType isEqual:@"Twitter"]) {
         identifier = ACAccountTypeIdentifierTwitter;
     } else {
+        // TODO: support TencentWeibo ?
         completionHandler(nil, @"invalid_social_type");
         return;
     }
