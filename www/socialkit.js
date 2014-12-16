@@ -5,18 +5,19 @@
 var exec = require('cordova/exec');
 
 
-function Request(options) {
-  options = options || {};
-  this.type = options.type;
-  this.account = options.account;
-}
-
 /** Fetch social accounts of a certain type */
-Request.accounts = function(type, options, callback, errorhandler) {
+exports.getAccounts = function(type, options, callback, errorhandler) {
   errorhandler = errorhandler || echoError;
   options = options || {};
   exec(callback, errorhandler, 'SocialKit', 'getAccounts', [type, options]);
 };
+
+
+/** Request interface */
+function Request(type, account) {
+  this.type = type;
+  this.account = account;
+}
 
 /** Send http request */
 Request.prototype.http = function(method, url, params, file, callback, errorhandler) {
@@ -52,4 +53,4 @@ function echoError(err) {
   console.error(err);
 }
 
-module.exports = Request;
+exports.Request = Request;
