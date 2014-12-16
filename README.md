@@ -15,8 +15,19 @@ function onDeviceReady() {
 
 ## Installation
 
+Install the plugin with `cordova`:
+
+    cordova plugin add com.lepture.socialkit
 
 ## navigator.socialkit.getAccounts
 
 
 ## navigator.socialkit.Request
+
+
+## Supported Platforms
+
+Only iOS.
+
+
+## Examples
