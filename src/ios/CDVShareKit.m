@@ -36,7 +36,7 @@
 {
 
     NSString *socialType = [command.arguments objectAtIndex:0];
-    NSDictionary *options = [command.arguments objectAtIndex:1];
+    NSDictionary *options = [command.arguments objectAtIndex:1 withDefault:nil];
     if ([options count] == 0) {
         options = nil;
     }
