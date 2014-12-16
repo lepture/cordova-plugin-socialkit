@@ -5,6 +5,7 @@
 #import <Social/SLRequest.h>
 #import <Social/SLServiceTypes.h>
 #import <Cordova/CDV.h>
+#import <Cordova/NSData+Base64.h>
 #import "CDVShareKit.h"
 
 @interface CDVShareKit ()
@@ -13,14 +14,15 @@
 
 - (void) getAccounts:(NSString *)socialType
          withOptions:(NSDictionary *)options
-         completion:(void (^)(NSArray *accounts, NSString *error))completionHandler;
+          completion:(void (^)(NSArray *accounts, NSString *error))completionHandler;
 
 - (void) sendRequest:(NSString *)socialType
-         identifier:(NSString *)identifier
-         method:(NSString *)method
-         URL:(NSString *)url
-         parameters:(NSDictionary *)params
-         completion:(void (^)(NSDictionary *responseData, NSString *error))completionHandler;
+          identifier:(NSString *)identifier
+              method:(NSString *)method
+                 URL:(NSString *)url
+          parameters:(NSDictionary *)params
+                file:(NSDictionary *)file
+          completion:(void (^)(NSDictionary *responseData, NSString *error))completionHandler;
 
 - (NSArray *) formatAccounts:(NSArray *)accounts;
 
@@ -37,7 +39,7 @@
 
     NSString *socialType = [command.arguments objectAtIndex:0];
     NSDictionary *options = [command.arguments objectAtIndex:1 withDefault:nil];
-    if ([options count] == 0) {
+    if (options != nil && [options count] == 0) {
         options = nil;
     }
 
@@ -62,8 +64,9 @@
         NSString *method = [command.arguments objectAtIndex:2];
         NSString *url = [command.arguments objectAtIndex:3];
         NSDictionary *params = [command.arguments objectAtIndex:4];
+        NSDictionary *file = [command.arguments objectAtIndex:5 withDefault:nil];
 
-        [self sendRequest:socialType identifier:identifier method:method URL:url parameters:params completion:^(NSDictionary *responseData, NSString *error) {
+        [self sendRequest:socialType identifier:identifier method:method URL:url parameters:params file:file completion:^(NSDictionary *responseData, NSString *error) {
             CDVPluginResult* pluginResult = nil;
             if (error) {
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
@@ -79,7 +82,7 @@
 
 - (void) getAccounts:(NSString *)socialType
          withOptions:(NSDictionary *)options
-         completion:(void (^)(NSArray *accounts, NSString *error))completionHandler {
+          completion:(void (^)(NSArray *accounts, NSString *error))completionHandler {
 
     NSString *identifier;
 
@@ -132,6 +135,7 @@
               method:(NSString *)method
                  URL:(NSString *)url
           parameters:(NSDictionary *)params
+                file:(NSDictionary *)file
           completion:(void (^)(NSDictionary *responseData, NSString *error))completionHandler {
 
     if (accountsDictionary == nil) {
@@ -177,6 +181,22 @@
                                                parameters:params];
 
     [request setAccount:requestAccount];
+
+    if (file != nil) {
+        NSString *rawdata = [file objectForKey:@"data"];
+        NSString *name = [file objectForKey:@"name"];
+        NSString *type = [file objectForKey:@"type"];
+        NSString *filename = [file objectForKey:@"filename"];
+        NSData *data;
+        if (rawdata != nil) {
+            NSData *data = [NSData dataFromBase64String:rawdata];
+        } else if (filename != nil) {
+            // TODO: read data from filepath
+        }
+        if (data != nil && name != nil && type != nil) {
+            [request addMultipartData:data withName:name type:type filename:filename];
+        }
+    }
 
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
         if (responseData) {

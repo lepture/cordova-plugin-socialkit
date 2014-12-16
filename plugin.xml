@@ -8,7 +8,7 @@
     <repo>https://github.com/lepture/cordova-plugin-sharekit.git</repo>
 
     <js-module src="www/sharekit.js" name="sharekit">
-        <clobbers target="sharekit" />
+        <clobbers target="navigator.sharekit" />
     </js-module>
 
     <platform name="ios">
