@@ -6,9 +6,9 @@
 #import <Social/SLServiceTypes.h>
 #import <Cordova/CDV.h>
 #import <Cordova/NSData+Base64.h>
-#import "CDVShareKit.h"
+#import "CDVSocialKit.h"
 
-@interface CDVShareKit ()
+@interface CDVSocialKit ()
 
 @property (nonatomic, strong) NSMutableDictionary *accountsDictionary;
 
@@ -29,7 +29,7 @@
 @end
 
 
-@implementation CDVShareKit
+@implementation CDVSocialKit
 
 @synthesize accountsDictionary;
 

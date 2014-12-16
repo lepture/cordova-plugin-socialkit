@@ -1,7 +1,7 @@
 
 #import <Cordova/CDVPlugin.h>
 
-@interface CDVShareKit: CDVPlugin
+@interface CDVSocialKit: CDVPlugin
 
 - (void)getAccounts:(CDVInvokedUrlCommand*)command;
 
