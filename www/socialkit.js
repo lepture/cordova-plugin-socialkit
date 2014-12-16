@@ -5,22 +5,26 @@
 var exec = require('cordova/exec');
 
 
+/** Service interface */
+function Service(type, account) {
+  if (!(this instanceof Service)) {
+    return new Service(type, account);
+  }
+  this.type = type;
+  this.account = account;
+}
+
+
 /** Fetch social accounts of a certain type */
-exports.getAccounts = function(type, options, callback, errorhandler) {
+Service.getAccounts = function(type, options, callback, errorhandler) {
   errorhandler = errorhandler || echoError;
   options = options || {};
   exec(callback, errorhandler, 'SocialKit', 'getAccounts', [type, options]);
 };
 
 
-/** Request interface */
-function Request(type, account) {
-  this.type = type;
-  this.account = account;
-}
-
 /** Send http request */
-Request.prototype.http = function(method, url, params, file, callback, errorhandler) {
+Service.prototype.http = function(method, url, params, file, callback, errorhandler) {
   errorhandler = errorhandler || echoError;
   params = params || {};
   file = file || {};
@@ -30,22 +34,22 @@ Request.prototype.http = function(method, url, params, file, callback, errorhand
 };
 
 /** Alias for GET http request. */
-Request.prototype.get = function(url, params, file, callback, errorhandler) {
+Service.prototype.get = function(url, params, file, callback, errorhandler) {
   this.http('GET', url, params, file, callback, errorhandler);
 };
 
 /** Alias for POST http request. */
-Request.prototype.post = function(url, params, file, callback, errorhandler) {
+Service.prototype.post = function(url, params, file, callback, errorhandler) {
   this.http('POST', url, params, file, callback, errorhandler);
 };
 
 /** Alias for PUT http request. */
-Request.prototype.put = function(url, params, file, callback, errorhandler) {
+Service.prototype.put = function(url, params, file, callback, errorhandler) {
   this.http('PUT', url, params, file, callback, errorhandler);
 };
 
 /** Alias for DELETE http request. */
-Request.prototype.delete = function(url, params, file, callback, errorhandler) {
+Service.prototype.delete = function(url, params, file, callback, errorhandler) {
   this.http('DELETE', url, params, file, callback, errorhandler);
 };
 
@@ -53,4 +57,4 @@ function echoError(err) {
   console.error(err);
 }
 
-exports.Request = Request;
+module.exports = Service;

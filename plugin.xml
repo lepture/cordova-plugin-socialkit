@@ -7,8 +7,8 @@
     <keywords>cordova,social,share,weibo,twitter,facebook</keywords>
     <repo>https://github.com/lepture/cordova-plugin-socialkit.git</repo>
 
-    <js-module src="www/socialkit.js" name="socialkit">
-        <clobbers target="navigator.socialkit" />
+    <js-module src="www/socialkit.js" name="SocialKit">
+        <clobbers target="SocialKit" />
     </js-module>
 
     <platform name="ios">
