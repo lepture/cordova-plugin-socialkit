@@ -17,6 +17,11 @@ function Service(type, account) {
 
 /** Fetch social accounts of a certain type */
 Service.getAccounts = function(type, options, callback, errorhandler) {
+  if (typeof(options) === 'function') {
+    callback = options;
+    errorhandler = callback;
+    options = null;
+  }
   errorhandler = errorhandler || echoError;
   options = options || {};
   exec(callback, errorhandler, 'SocialKit', 'getAccounts', [type, options]);
@@ -25,6 +30,17 @@ Service.getAccounts = function(type, options, callback, errorhandler) {
 
 /** Send http request */
 Service.prototype.http = function(method, url, params, file, callback, errorhandler) {
+  if (typeof(params) === 'function') {
+    callback = params;
+    errorhandler = file;
+    params = {};
+    file = {};
+  } else if (typeof(file) === 'function') {
+    callback = file;
+    errorhandler = callback;
+    file = {};
+  }
+
   errorhandler = errorhandler || echoError;
   params = params || {};
   file = file || {};
