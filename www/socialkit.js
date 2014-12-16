@@ -1,5 +1,5 @@
 /**
- * Share Kit
+ * Social Kit
  */
 
 var exec = require('cordova/exec');
@@ -15,7 +15,7 @@ function Request(options) {
 Request.accounts = function(type, options, callback, errorhandler) {
   errorhandler = errorhandler || echoError;
   options = options || {};
-  exec(callback, errorhandler, 'ShareKit', 'getAccounts', [type, options]);
+  exec(callback, errorhandler, 'SocialKit', 'getAccounts', [type, options]);
 };
 
 /** Send http request */
@@ -23,7 +23,7 @@ Request.prototype.http = function(method, url, params, file, callback, errorhand
   errorhandler = errorhandler || echoError;
   params = params || {};
   file = file || {};
-  exec(callback, errorhandler, 'ShareKit', 'sendRequest', [
+  exec(callback, errorhandler, 'SocialKit', 'sendRequest', [
        this.type, this.account, method, url, params, file
   ]);
 };

@@ -189,7 +189,7 @@
         NSString *filename = [file objectForKey:@"filename"];
         NSData *data;
         if (rawdata != nil) {
-            NSData *data = [NSData dataFromBase64String:rawdata];
+            data = [NSData dataFromBase64String:rawdata];
         } else if (filename != nil) {
             // TODO: read data from filepath
         }
