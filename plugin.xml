@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-    id="com.lepture.cordova.socialkit" version="0.1.0">
+    id="com.lepture.socialkit" version="0.1.0">
     <name>SocialKit</name>
     <description>Cordova SocialKit Plugin</description>
     <license>Apache 2.0</license>

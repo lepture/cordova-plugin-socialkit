@@ -79,7 +79,7 @@
 
         [self sendRequest:socialType identifier:identifier method:method URL:url parameters:params file:file completion:^(NSDictionary *responseData, NSString *error) {
             CDVPluginResult* pluginResult = nil;
-            if (error) {
+            if (responseData == nil) {
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
             } else {
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseData];
