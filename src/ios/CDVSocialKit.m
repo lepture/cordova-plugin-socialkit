@@ -49,11 +49,6 @@
     NSString *socialType = [command.arguments objectAtIndex:0];
     NSDictionary *options = [command.arguments objectAtIndex:1 withDefault:nil];
 
-    // nil is required for empty options
-    if (options != nil && [options count] == 0) {
-        options = nil;
-    }
-
     [self getAccounts:socialType withOptions:options completion:^(NSArray *accounts, NSString *error) {
         CDVPluginResult* pluginResult = nil;
         if (error) {
@@ -66,17 +61,15 @@
 }
 
 
-- (void) sendRequest:(CDVInvokedUrlCommand*)command
-{
+- (void) sendRequest:(CDVInvokedUrlCommand*)command {
+    NSString *socialType = [command.arguments objectAtIndex:0];
+    NSString *identifier = [command.arguments objectAtIndex:1];
+    NSString *method = [command.arguments objectAtIndex:2];
+    NSString *url = [command.arguments objectAtIndex:3];
+    NSDictionary *params = [command.arguments objectAtIndex:4];
+    NSDictionary *file = [command.arguments objectAtIndex:5 withDefault:nil];
+
     [self.commandDelegate runInBackground:^{
-
-        NSString *socialType = [command.arguments objectAtIndex:0];
-        NSString *identifier = [command.arguments objectAtIndex:1];
-        NSString *method = [command.arguments objectAtIndex:2];
-        NSString *url = [command.arguments objectAtIndex:3];
-        NSDictionary *params = [command.arguments objectAtIndex:4];
-        NSDictionary *file = [command.arguments objectAtIndex:5 withDefault:nil];
-
         [self sendRequest:socialType identifier:identifier method:method URL:url parameters:params file:file completion:^(NSDictionary *responseData, NSString *error) {
             CDVPluginResult* pluginResult = nil;
             if (responseData == nil) {
@@ -86,10 +79,8 @@
             }
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }];
-
     }];
 }
-
 
 - (void) getAccounts:(NSString *)socialType
          withOptions:(NSDictionary *)options
@@ -107,6 +98,11 @@
         // TODO: support TencentWeibo ?
         completionHandler(nil, @"invalid_social_type");
         return;
+    }
+
+    // nil is required for empty options
+    if (options != nil && [options count] == 0) {
+        options = nil;
     }
 
     ACAccountStore *accountStore = [[ACAccountStore alloc] init];
