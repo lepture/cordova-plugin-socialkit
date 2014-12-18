@@ -4,26 +4,29 @@
 
 var exec = require('cordova/exec');
 
+// factory cache
+var ref = {};
 
 /** Service interface */
-function Service(type, account) {
+function Service(type, identifier, options) {
   if (!(this instanceof Service)) {
-    return new Service(type, account);
+    if (ref[identifier]) return ref[identifier];
+    var instance = new Service(type, identifier, options);
+    ref[identifier] = instance;
+    return instance;
+  }
+  if (!type || !identifier) {
+    throw new Error('type and identifier are required');
   }
   this.type = type;
-  this.account = account;
+  this.identifier = identifier;
+  this.options = options || {};
 }
 
 
-/** Fetch social accounts of a certain type */
-Service.getAccounts = function(type, options, callback, errorhandler) {
-  if (typeof(options) === 'function') {
-    callback = options;
-    errorhandler = callback;
-    options = null;
-  }
+/** Fetch social identifiers of a certain type */
+Service.getIdentifiers = function(type, options, callback, errorhandler) {
   errorhandler = errorhandler || echoError;
-  options = options || {};
   exec(callback, errorhandler, 'SocialKit', 'getAccounts', [type, options]);
 };
 
@@ -43,9 +46,21 @@ Service.prototype.http = function(method, url, params, file, callback, errorhand
 
   errorhandler = errorhandler || echoError;
   params = params || {};
+
+  // Make sure all params are strings
+  Object.keys(params).forEach(function(key) {
+    params[key] = params[key].toString();
+  });
+
   file = file || {};
+
+  // define formatURL
+  if (this.formatURL && !/^http:\/\//.test(url)) {
+    url = this.formatURL(url);
+  }
+
   exec(callback, errorhandler, 'SocialKit', 'sendRequest', [
-       this.type, this.account, method, url, params, file
+       this.type, this.identifier, method, url, params, file, this.options,
   ]);
 };
 
