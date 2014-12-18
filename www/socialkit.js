@@ -27,7 +27,19 @@ function Service(type, identifier, options) {
 /** Fetch social identifiers of a certain type */
 Service.getIdentifiers = function(type, options, callback, errorhandler) {
   errorhandler = errorhandler || echoError;
-  exec(callback, errorhandler, 'SocialKit', 'getAccounts', [type, options]);
+  if (ref[type]) {
+    return callback(ref[type]);
+  }
+  exec(function(data) {
+    ref[type] = data;
+    callback(data);
+  }, errorhandler, 'SocialKit', 'getAccounts', [type, options]);
+};
+
+
+/** Refresh cache */
+Service.refresh = function() {
+  ref = {};
 };
 
 
@@ -59,9 +71,18 @@ Service.prototype.http = function(method, url, params, file, callback, errorhand
     url = this.formatURL(url);
   }
 
-  exec(callback, errorhandler, 'SocialKit', 'sendRequest', [
-       this.type, this.identifier, method, url, params, file, this.options,
-  ]);
+  var type = this.type, identifier = this.identifier;
+  var request = function() {
+    exec(callback, errorhandler, 'SocialKit', 'sendRequest', [
+         type, identifier, method, url, params, file
+    ]);
+  };
+
+  if (ref[type]) {
+    request();
+  } else {
+    Service.getIdentifiers(type, this.options, request);
+  }
 };
 
 /** Alias for GET http request. */
